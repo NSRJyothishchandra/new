@@ -24,7 +24,9 @@ export default function Header() {
   const { user } = useAuth();
 
   const cart = useCart().data;
-  const cartLength = Object.keys(cart).reduce((a, b) => a + cart[b].length, 0);
+  const cartLength = cart
+    ? Object.keys(cart).reduce((a, b) => a + cart[b].length, 0)
+    : 0;
 
   return (
     <nav className={styles.container}>
@@ -85,11 +87,12 @@ export default function Header() {
           className={styles.searchIcon}
         />
         <form
-          onSubmit={() =>
-            input &&
-            typeof window !== "undefined" &&
-            router.push(`/search/${input}`)
-          }
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (input && typeof window !== "undefined") {
+              router.push(`/search/${input}`);
+            }
+          }}
         >
           <input
             className={styles.searchInput}
